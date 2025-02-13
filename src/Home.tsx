@@ -100,9 +100,14 @@ interface PropertyCardProps {
 }
 
 // @ts-ignore
+const truncateText = (text: string, maxLength: number) => {
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+};
+// @ts-ignore
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
     const totalPhotos = property.photos.length;
+    const maxDescriptionLength = 100; // Установи нужную длину
 
     const handlePrev = () => {
         setCurrentPhotoIndex((prev) => (prev === 0 ? totalPhotos - 1 : prev - 1));
@@ -150,8 +155,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             <h2 style={{ fontSize: "1.25rem", fontWeight: "600", marginTop: "0.5rem" }}>
                 {property.title}
             </h2>
-            <p style={{ color: "#4b5563", margin: "0.5rem 0" }}>
-                {property.description}
+            <p className="description" style={{ color: "#4b5563", margin: "0.5rem 0", width: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>
+                {truncateText(property.description, maxDescriptionLength)}
             </p>
             <p style={{ fontSize: "1.125rem", fontWeight: "700", margin: "0.5rem 0" }}>
                 💰 {property.pricePerNight} ₽/ночь
@@ -165,3 +170,4 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         </div>
     );
 };
+

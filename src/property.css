@@ -48,6 +48,10 @@
     gap: 1.25rem;
 }
 
+.description {
+    width: 200px;
+}
+
 .property-card {
     background-color: white;
     border-radius: 0.375rem;
