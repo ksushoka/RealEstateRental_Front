@@ -8,6 +8,7 @@ const AddProperty = () => {
         title: "",
         description: "",
         pricePerNight: "",
+        location: "",
         photos: [] as File[],
     });
 
@@ -36,6 +37,7 @@ const AddProperty = () => {
         data.append("title", formData.title);
         data.append("description", formData.description);
         data.append("pricePerNight", formData.pricePerNight);
+        data.append("location", formData.location);
         // Добавляем все выбранные файлы
         formData.photos.forEach((photo) => {
             data.append("photos", photo);
@@ -46,7 +48,7 @@ const AddProperty = () => {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             alert("Недвижимость добавлена!");
-            setFormData({ title: "", description: "", pricePerNight: "", photos: [] });
+            setFormData({ title: "", description: "", pricePerNight: "",location: "", photos: [] });
         } catch (error) {
             console.error("Ошибка:", error);
         }
@@ -98,6 +100,15 @@ const AddProperty = () => {
                         onChange={handleChange}
                         className="form-input"
                         required
+                    />
+                    <input
+                    type="text"
+                    name="location"
+                    placeholder="Местоположение"
+                    value={formData.location}
+                    onChange={handleChange}
+                    className="form-input"
+                    required
                     />
                     <input
                         type="file"

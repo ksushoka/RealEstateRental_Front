@@ -15,6 +15,7 @@ interface Property {
     title: string;
     description: string;
     pricePerNight: number;
+    location: string;
     photos: Photo[];
 }
 
@@ -160,6 +161,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             </p>
             <p style={{ fontSize: "1.125rem", fontWeight: "700", margin: "0.5rem 0" }}>
                 💰 {property.pricePerNight} ₽/ночь
+            </p>
+            <p style={{ fontSize: "1.125rem", fontWeight: "900", margin: "0.5rem 0", color: "#FF0000" }}>
+              {property.location}
             </p>
             <button
                 className="button green-button"
