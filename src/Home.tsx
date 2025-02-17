@@ -96,19 +96,18 @@ const Home = () => {
 export default Home;
 
 // Компонент карточки недвижимости, который отображает слайдер фотографий
+// Внутри Home.tsx (или отдельного файла компонента PropertyCard.tsx)
+import { Link } from 'react-router-dom';
+
 interface PropertyCardProps {
     property: Property;
 }
 
 // @ts-ignore
-const truncateText = (text: string, maxLength: number) => {
-    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
-};
-// @ts-ignore
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
     const totalPhotos = property.photos.length;
-    const maxDescriptionLength = 100; // Установи нужную длину
+    const maxDescriptionLength = 100;
 
     const handlePrev = () => {
         setCurrentPhotoIndex((prev) => (prev === 0 ? totalPhotos - 1 : prev - 1));
@@ -121,57 +120,52 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     };
 
     return (
-        <div className="property-card">
-            <div className="slider-container" style={{ position: "relative" }}>
-                {totalPhotos > 0 && (
-                    <img
-                        src={`http://localhost:8080/properties/photos/${property.photos[currentPhotoIndex].fileName}`}
-                        alt={property.title}
-                        className="property-image"
-                        key={currentPhotoIndex}
-                    />
-                )}
-                {totalPhotos > 1 && (
-                    <>
-                        <button
-                            onClick={handlePrev}
-                            className="slider-button slider-button-left"
-                        >
-                            &#9664;
-                        </button>
-                        <button
-                            onClick={handleNext}
-                            className="slider-button slider-button-right"
-                        >
-                            &#9654;
-                        </button>
-                    </>
-                )}
-                {totalPhotos === 0 && (
-                    <div className="image-placeholder">
-                        <span>Нет изображения</span>
-                    </div>
-                )}
+        <Link to={`/properties/${property.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div className="property-card">
+                <div className="slider-container" style={{ position: "relative" }}>
+                    {totalPhotos > 0 && (
+                        <img
+                            src={`http://localhost:8080/properties/photos/${property.photos[currentPhotoIndex].fileName}`}
+                            alt={property.title}
+                            className="property-image"
+                        />
+                    )}
+                    {totalPhotos > 1 && (
+                        <>
+                            <button onClick={handlePrev} className="slider-button slider-button-left">
+                                &#9664;
+                            </button>
+                            <button onClick={handleNext} className="slider-button slider-button-right">
+                                &#9654;
+                            </button>
+                        </>
+                    )}
+                    {totalPhotos === 0 && (
+                        <div className="image-placeholder">
+                            <span>Нет изображения</span>
+                        </div>
+                    )}
+                </div>
+                <h2 style={{ fontSize: "1.25rem", fontWeight: "600", marginTop: "0.5rem" }}>
+                    {property.title}
+                </h2>
+                <p className="description" style={{ color: "#4b5563", margin: "0.5rem 0", width: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>
+                    {property.description.length > maxDescriptionLength
+                        ? property.description.slice(0, maxDescriptionLength) + "..."
+                        : property.description}
+                </p>
+                <p style={{ fontSize: "1.125rem", fontWeight: "700", margin: "0.5rem 0" }}>
+                    💰 {property.pricePerNight} ₽/ночь
+                </p>
+                <p style={{ fontSize: "1.125rem", fontWeight: "900", margin: "0.5rem 0", color: "#FF0000" }}>
+                    {property.location}
+                </p>
+                <button className="button green-button" style={{ width: "100%", marginTop: "0.75rem" }}>
+                    Забронировать
+                </button>
             </div>
-            <h2 style={{ fontSize: "1.25rem", fontWeight: "600", marginTop: "0.5rem" }}>
-                {property.title}
-            </h2>
-            <p className="description" style={{ color: "#4b5563", margin: "0.5rem 0", width: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>
-                {truncateText(property.description, maxDescriptionLength)}
-            </p>
-            <p style={{ fontSize: "1.125rem", fontWeight: "700", margin: "0.5rem 0" }}>
-                💰 {property.pricePerNight} ₽/ночь
-            </p>
-            <p style={{ fontSize: "1.125rem", fontWeight: "900", margin: "0.5rem 0", color: "#FF0000" }}>
-              {property.location}
-            </p>
-            <button
-                className="button green-button"
-                style={{ width: "100%", marginTop: "0.75rem" }}
-            >
-                Забронировать
-            </button>
-        </div>
+        </Link>
     );
 };
+
 

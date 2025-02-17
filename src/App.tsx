@@ -1,3 +1,4 @@
+// App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 // @ts-ignore
@@ -12,6 +13,8 @@ import UserDetailPage from './UserDetailPage.tsx';
 import UserListPage from './UserListPage.tsx';
 // @ts-ignore
 import AddProperty from './AddProperty.tsx';
+// @ts-ignore
+import PropertyDetailPage from './PropertyDetailPage.tsx'; // Импорт нового компонента
 
 const App = () => {
   return (
@@ -44,14 +47,14 @@ const App = () => {
         </header>
 
         <Routes>
-          {/* Основные маршруты */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/user" element={<UserPage />} />
           <Route path="/users" element={<UserListPage />} />
-          {/* Динамический маршрут для страницы студента по ID */}
           <Route path="/user/:id" element={<UserDetailPage />} />
           <Route path="/addProperty" element={<AddProperty />} />
+          {/* Новый маршрут для страницы деталей недвижимости */}
+          <Route path="/properties/:id" element={<PropertyDetailPage />} />
         </Routes>
       </Router>
   );
