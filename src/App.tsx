@@ -1,6 +1,6 @@
 // App.tsx
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 // @ts-ignore
 import Home from './Home.tsx';
 // @ts-ignore
@@ -14,50 +14,50 @@ import UserListPage from './UserListPage.tsx';
 // @ts-ignore
 import AddProperty from './AddProperty.tsx';
 // @ts-ignore
-import PropertyDetailPage from './PropertyDetailPage.tsx'; // Импорт нового компонента
+import PropertyDetailPage from './PropertyDetailPage.tsx';
+
+// @ts-ignore
+import Login from './Login.tsx';
+
+// @ts-ignore
+import Registration from './Registration.tsx';
 
 const App = () => {
-  return (
-      <Router>
-        <header
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '2rem',
-              padding: '15px 0',
-              backgroundColor: '#f0f0f0',
-            }}
-        >
-          <Link to="/" style={{ textDecoration: 'none', color: '#333' }}>
-            Home
-          </Link>
-          <Link to="/about" style={{ textDecoration: 'none', color: '#333' }}>
-            About
-          </Link>
-          <Link to="/user" style={{ textDecoration: 'none', color: '#333' }}>
-            Add User
-          </Link>
-          <Link to="/users" style={{ textDecoration: 'none', color: '#333' }}>
-            User List
-          </Link>
-          <Link to="/addProperty" style={{ textDecoration: 'none', color: '#333' }}>
-            Add Property
-          </Link>
-        </header>
+    return (
+        <Router>
+            <header
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '2rem',
+                    padding: '15px 0',
+                    backgroundColor: '#f0f0f0',
+                }}
+            >
+                <Link to="/" style={{ textDecoration: 'none', color: '#333' }}>Home</Link>
+                <Link to="/about" style={{ textDecoration: 'none', color: '#333' }}>About</Link>
+                <Link to="/user" style={{ textDecoration: 'none', color: '#333' }}>Add User</Link>
+                <Link to="/users" style={{ textDecoration: 'none', color: '#333' }}>User List</Link>
+                <Link to="/addProperty" style={{ textDecoration: 'none', color: '#333' }}>Add Property</Link>
+                <Link to="/login" style={{ textDecoration: 'none', color: '#007bff' }}>Login</Link>
+                <Link to="/registration" style={{ textDecoration: 'none', color: '#28a745' }}>Register</Link>
+            </header>
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/user" element={<UserPage />} />
-          <Route path="/users" element={<UserListPage />} />
-          <Route path="/user/:id" element={<UserDetailPage />} />
-          <Route path="/addProperty" element={<AddProperty />} />
-          {/* Новый маршрут для страницы деталей недвижимости */}
-          <Route path="/properties/:id" element={<PropertyDetailPage />} />
-        </Routes>
-      </Router>
-  );
+            <Routes>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/about" element={<AboutPage/>}/>
+                <Route path="/user" element={<UserPage/>}/>
+                <Route path="/users" element={<UserListPage/>}/>
+                <Route path="/user/:id" element={<UserDetailPage/>}/>
+                <Route path="/addProperty" element={<AddProperty/>}/>
+                {/* Новый маршрут для страницы деталей недвижимости */}
+                <Route path="/properties/:id" element={<PropertyDetailPage/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/registration" element={<Registration/>}/>
+            </Routes>
+        </Router>
+    );
 };
 
 export default App;
