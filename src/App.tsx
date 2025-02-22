@@ -35,13 +35,13 @@ const App = () => {
                     backgroundColor: '#f0f0f0',
                 }}
             >
-                <Link to="/" style={{ textDecoration: 'none', color: '#333' }}>Home</Link>
-                <Link to="/about" style={{ textDecoration: 'none', color: '#333' }}>About</Link>
-                <Link to="/user" style={{ textDecoration: 'none', color: '#333' }}>Add User</Link>
-                <Link to="/users" style={{ textDecoration: 'none', color: '#333' }}>User List</Link>
-                <Link to="/addProperty" style={{ textDecoration: 'none', color: '#333' }}>Add Property</Link>
-                <Link to="/login" style={{ textDecoration: 'none', color: '#007bff' }}>Login</Link>
-                <Link to="/registration" style={{ textDecoration: 'none', color: '#28a745' }}>Register</Link>
+                <Link to="/" style={{ textDecoration: 'none', color: '#333' }}>Главная</Link>
+                <Link to="/about" style={{ textDecoration: 'none', color: '#333' }}>О недвижимости</Link>
+                {/*<Link to="/user" style={{ textDecoration: 'none', color: '#333' }}>Add User</Link>*/}
+                <Link to="/users" style={{ textDecoration: 'none', color: '#333' }}>Список владельцев</Link>
+                <Link to="/addProperty" style={{ textDecoration: 'none', color: '#333' }}>Создать объявление</Link>
+                <Link to="/login" style={{ textDecoration: 'none', color: '#007bff' }}>Вход</Link>
+                <Link to="/registration" style={{ textDecoration: 'none', color: '#28a745' }}>Регистрация</Link>
             </header>
 
             <Routes>
