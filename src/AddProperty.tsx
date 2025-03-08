@@ -3,14 +3,28 @@ import { useState } from "react";
 import axios from "axios";
 import "./property.css";
 
+// const AmenityTypes = {
+//     WI_FI: "Интернет",
+//     FRIDGE: "Холодильник",
+//     KETTLE: "Чайник",
+//     TV: "Телевизор",
+// } as const;
+
 const AddProperty = () => {
     const [formData, setFormData] = useState({
         title: "",
         description: "",
         pricePerNight: "",
         location: "",
+        amenityTypes: [] as String[],
         photos: [] as File[],
     });
+    // const handleAmenityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    //     const selected = Array.from(e.target.selectedOptions).map(
+    //       (option) => option.value
+    //     );
+    //     setFormData({ ...formData, amenityTypes: selected });
+    // };
 
     const handleChange = (
         // @ts-ignore
@@ -27,7 +41,11 @@ const AddProperty = () => {
             setFormData({ ...formData, photos: filesArray });
         }
     };
-
+    // @ts-ignore
+    const handleAmenityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedOptions = Array.from(e.target.selectedOptions as HTMLOptionElement[]).map(option => option.value);
+        setFormData({ ...formData, amenityTypes: selectedOptions });
+    };
     // @ts-ignore
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -39,6 +57,9 @@ const AddProperty = () => {
         data.append("pricePerNight", formData.pricePerNight);
         data.append("location", formData.location);
         // Добавляем все выбранные файлы
+        formData.amenityTypes.forEach((amenityType) => {
+            data.append("amenityTypes", amenityType);
+        });
         formData.photos.forEach((photo) => {
             data.append("photos", photo);
         });
@@ -48,7 +69,7 @@ const AddProperty = () => {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             alert("Недвижимость добавлена!");
-            setFormData({ title: "", description: "", pricePerNight: "",location: "", photos: [] });
+            setFormData({ title: "", description: "", pricePerNight: "",location: "", amenityTypes: [], photos: [] });
         } catch (error) {
             console.error("Ошибка:", error);
         }
@@ -110,6 +131,19 @@ const AddProperty = () => {
                     className="form-input"
                     required
                     />
+                    <select
+                        name="amenityTypes"
+                        multiple
+                        value={formData.amenityTypes}
+                        onChange={handleAmenityChange}
+                        className="form-input"
+                        required
+                        >
+                        <option value="WI_FI">Интернет</option>
+                        <option value="FRIDGE">Холодильник</option>
+                        <option value="KETTLE">Чайник</option>
+                        <option value="TV">Телевизор</option>
+                    </select>
                     <input
                         type="file"
                         accept="image/*"
