@@ -1,19 +1,12 @@
-// PropertyDetailPage.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import './property.css'; // можно добавить собственные стили
+import './property-detail.css'; // можно добавить собственные стили
 
 // Интерфейсы для типов данных
 interface Photo {
     id: number;
     fileName: string;
-}
-
-interface Amenity {
-    id: number;
-    name: string;
-    description: string;
 }
 
 interface Property {
@@ -23,7 +16,8 @@ interface Property {
     pricePerNight: number;
     location: string;
     photos: Photo[];
-    amenities: Amenity[];
+    // Добавлено поле удобств, предполагается, что API возвращает массив строк
+    amenityTypes: string[];
 }
 
 const PropertyDetailPage: React.FC = () => {
@@ -33,10 +27,22 @@ const PropertyDetailPage: React.FC = () => {
     useEffect(() => {
         const fetchProperty = async () => {
             try {
-                const response = await axios.get<Property>(`http://localhost:8080/properties/${id}`);
+                const token = localStorage.getItem("token");
+                console.log("Токен:", token); // Проверяем, есть ли токен
+                const response = await axios.get<Property>(
+                    `http://localhost:8080/properties/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
                 setProperty(response.data);
             } catch (error) {
                 console.error("Ошибка при загрузке недвижимости:", error);
+                if (axios.isAxiosError(error)) {
+                    console.error("Ответ сервера:", error.response);
+                }
             }
         };
         fetchProperty();
@@ -69,16 +75,14 @@ const PropertyDetailPage: React.FC = () => {
             <p><strong>Локация:</strong> {property.location}</p>
             <div className="amenities">
                 <h3>Удобства:</h3>
-                {property.amenities && property.amenities.length > 0 ? (
+                {property.amenityTypes && property.amenityTypes.length > 0 ? (
                     <ul>
-                        {property.amenities.map((amenity) => (
-                            <li key={amenity.id}>
-                                <strong>{amenity.name}</strong> - {amenity.description}
-                            </li>
+                        {property.amenityTypes.map((amenity, index) => (
+                            <li key={index}>{amenity}</li>
                         ))}
                     </ul>
                 ) : (
-                    <p>Удобства не указаны</p>
+                    <p>Удобства отсутствуют</p>
                 )}
             </div>
         </div>

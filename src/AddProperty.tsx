@@ -1,14 +1,18 @@
-// AddProperty.tsx
 import { useState } from "react";
 import axios from "axios";
 import "./property.css";
 
-// const AmenityTypes = {
-//     WI_FI: "Интернет",
-//     FRIDGE: "Холодильник",
-//     KETTLE: "Чайник",
-//     TV: "Телевизор",
-// } as const;
+interface AmenityOption {
+    value: string;
+    label: string;
+}
+
+const amenityOptions: AmenityOption[] = [
+    { value: "WI_FI", label: "Интернет" },
+    { value: "FRIDGE", label: "Холодильник" },
+    { value: "KETTLE", label: "Чайник" },
+    { value: "TV", label: "Телевизор" },
+];
 
 const AddProperty = () => {
     const [formData, setFormData] = useState({
@@ -16,15 +20,9 @@ const AddProperty = () => {
         description: "",
         pricePerNight: "",
         location: "",
-        amenityTypes: [] as String[],
+        amenityTypes: [] as string[],
         photos: [] as File[],
     });
-    // const handleAmenityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    //     const selected = Array.from(e.target.selectedOptions).map(
-    //       (option) => option.value
-    //     );
-    //     setFormData({ ...formData, amenityTypes: selected });
-    // };
 
     const handleChange = (
         // @ts-ignore
@@ -36,15 +34,26 @@ const AddProperty = () => {
     // @ts-ignore
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            // Преобразуем FileList в массив
             const filesArray = Array.from(e.target.files);
             setFormData({ ...formData, photos: filesArray });
         }
     };
     // @ts-ignore
-    const handleAmenityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedOptions = Array.from(e.target.selectedOptions as HTMLOptionElement[]).map(option => option.value);
-        setFormData({ ...formData, amenityTypes: selectedOptions });
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = e.target;
+        let updatedAmenities = [...formData.amenityTypes];
+
+        if (checked) {
+            // Добавляем, если не включено
+            if (!updatedAmenities.includes(value)) {
+                updatedAmenities.push(value);
+            }
+        } else {
+            // Удаляем, если снята галочка
+            updatedAmenities = updatedAmenities.filter((amenity) => amenity !== value);
+        }
+
+        setFormData({ ...formData, amenityTypes: updatedAmenities });
     };
     // @ts-ignore
     const handleSubmit = async (e: React.FormEvent) => {
@@ -56,7 +65,7 @@ const AddProperty = () => {
         data.append("description", formData.description);
         data.append("pricePerNight", formData.pricePerNight);
         data.append("location", formData.location);
-        // Добавляем все выбранные файлы
+
         formData.amenityTypes.forEach((amenityType) => {
             data.append("amenityTypes", amenityType);
         });
@@ -66,10 +75,21 @@ const AddProperty = () => {
 
         try {
             await axios.post("http://localhost:8080/properties", data, {
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                withCredentials: true
             });
             alert("Недвижимость добавлена!");
-            setFormData({ title: "", description: "", pricePerNight: "",location: "", amenityTypes: [], photos: [] });
+            setFormData({
+                title: "",
+                description: "",
+                pricePerNight: "",
+                location: "",
+                amenityTypes: [],
+                photos: [],
+            });
         } catch (error) {
             console.error("Ошибка:", error);
         }
@@ -123,27 +143,29 @@ const AddProperty = () => {
                         required
                     />
                     <input
-                    type="text"
-                    name="location"
-                    placeholder="Местоположение"
-                    value={formData.location}
-                    onChange={handleChange}
-                    className="form-input"
-                    required
-                    />
-                    <select
-                        name="amenityTypes"
-                        multiple
-                        value={formData.amenityTypes}
-                        onChange={handleAmenityChange}
+                        type="text"
+                        name="location"
+                        placeholder="Местоположение"
+                        value={formData.location}
+                        onChange={handleChange}
                         className="form-input"
                         required
-                        >
-                        <option value="WI_FI">Интернет</option>
-                        <option value="FRIDGE">Холодильник</option>
-                        <option value="KETTLE">Чайник</option>
-                        <option value="TV">Телевизор</option>
-                    </select>
+                    />
+                    <div className="amenities">
+                        <p>Выберите удобства:</p>
+                        {amenityOptions.map((amenity) => (
+                            <label key={amenity.value} className="amenity-label">
+                                <input
+                                    type="checkbox"
+                                    name="amenityTypes"
+                                    value={amenity.value}
+                                    checked={formData.amenityTypes.includes(amenity.value)}
+                                    onChange={handleCheckboxChange}
+                                />
+                                {amenity.label}
+                            </label>
+                        ))}
+                    </div>
                     <input
                         type="file"
                         accept="image/*"
