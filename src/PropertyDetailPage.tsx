@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import './property-detail.css'; // можно добавить собственные стили
+import './property-detail.css';
 
-// Интерфейсы для типов данных
 interface Photo {
     id: number;
     fileName: string;
@@ -16,7 +15,6 @@ interface Property {
     pricePerNight: number;
     location: string;
     photos: Photo[];
-    // Добавлено поле удобств, предполагается, что API возвращает массив строк
     amenityTypes: string[];
 }
 
@@ -28,7 +26,6 @@ const PropertyDetailPage: React.FC = () => {
         const fetchProperty = async () => {
             try {
                 const token = localStorage.getItem("token");
-                console.log("Токен:", token); // Проверяем, есть ли токен
                 const response = await axios.get<Property>(
                     `http://localhost:8080/properties/${id}`,
                     {
@@ -40,9 +37,6 @@ const PropertyDetailPage: React.FC = () => {
                 setProperty(response.data);
             } catch (error) {
                 console.error("Ошибка при загрузке недвижимости:", error);
-                if (axios.isAxiosError(error)) {
-                    console.error("Ответ сервера:", error.response);
-                }
             }
         };
         fetchProperty();
@@ -58,9 +52,9 @@ const PropertyDetailPage: React.FC = () => {
             <h1>{property.title}</h1>
             <div className="photo-gallery">
                 {property.photos && property.photos.length > 0 ? (
-                    property.photos.map((photo, index) => (
+                    property.photos.map((photo) => (
                         <img
-                            key={index}
+                            key={photo.id}
                             src={`http://localhost:8080/properties/photos/${photo.fileName}`}
                             alt={property.title}
                             className="property-photo"

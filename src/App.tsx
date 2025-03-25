@@ -19,6 +19,7 @@ import Login from './Login.tsx';
 // @ts-ignore
 import Registration from './Registration.tsx';
 
+
 const App = () => {
     // Состояние для проверки авторизации пользователя
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -79,7 +80,7 @@ const App = () => {
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/user" element={<UserPage />} />
                 <Route path="/users" element={<UserListPage />} />
-                <Route path="/user/:id" element={<UserDetailPage />} />
+                <Route path="/users/:id" element={<UserDetailPage />} />
                 <Route path="/addProperty" element={<AddProperty />} />
                 <Route path="/properties/:id" element={<PropertyDetailPage />} />
                 <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
