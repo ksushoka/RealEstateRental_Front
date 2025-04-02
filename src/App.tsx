@@ -1,38 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 // @ts-ignore
-import Home from './Home.tsx';
+import Home from "./Home.tsx";
 // @ts-ignore
-import AboutPage from './AboutPage.tsx';
+import AboutPage from "./AboutPage.tsx";
 // @ts-ignore
-import UserPage from './UserPage.tsx';
+import UserPage from "./UserPage.tsx";
 // @ts-ignore
-import UserDetailPage from './UserDetailPage.tsx';
+import UserDetailPage from "./UserDetailPage.tsx";
 // @ts-ignore
-import UserListPage from './UserListPage.tsx';
+import UserListPage from "./UserListPage.tsx";
 // @ts-ignore
-import AddProperty from './AddProperty.tsx';
+import AddProperty from "./AddProperty.tsx";
 // @ts-ignore
-import PropertyDetailPage from './PropertyDetailPage.tsx';
+import PropertyDetailPage from "./PropertyDetailPage.tsx";
 // @ts-ignore
-import Login from './Login.tsx';
+import Login from "./Login.tsx";
 // @ts-ignore
-import Registration from './Registration.tsx';
+import Registration from "./Registration.tsx";
+// @ts-ignore
+import BookingWrapper from "./BookingWrapper.tsx";
 
-
-const App = () => {
-    // Состояние для проверки авторизации пользователя
+const App: React.FC = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-    // Проверяем токен при загрузке
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         setIsLoggedIn(!!token);
     }, []);
 
-    // Функция для выхода
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
         setIsLoggedIn(false);
     };
 
@@ -40,34 +38,49 @@ const App = () => {
         <Router>
             <header
                 style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '2rem',
-                    padding: '15px 0',
-                    backgroundColor: '#f0f0f0',
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "2rem",
+                    padding: "15px 0",
+                    backgroundColor: "#f0f0f0",
                 }}
             >
-                <Link to="/" style={{ textDecoration: 'none', color: '#333' }}>Главная</Link>
-                <Link to="/about" style={{ textDecoration: 'none', color: '#333' }}>О недвижимости</Link>
-                <Link to="/users" style={{ textDecoration: 'none', color: '#333' }}>Список владельцев</Link>
-                <Link to="/addProperty" style={{ textDecoration: 'none', color: '#333' }}>Создать объявление</Link>
+                <Link to="/" style={{ textDecoration: "none", color: "#333" }}>
+                    Главная
+                </Link>
+                <Link to="/about" style={{ textDecoration: "none", color: "#333" }}>
+                    О недвижимости
+                </Link>
+                <Link to="/users" style={{ textDecoration: "none", color: "#333" }}>
+                    Список владельцев
+                </Link>
+                <Link to="/addProperty" style={{ textDecoration: "none", color: "#333" }}>
+                    Создать объявление
+                </Link>
 
                 {!isLoggedIn ? (
                     <>
-                        <Link to="/login" style={{ textDecoration: 'none', color: '#007bff' }}>Вход</Link>
-                        <Link to="/registration" style={{ textDecoration: 'none', color: '#28a745' }}>Регистрация</Link>
+                        <Link to="/login" style={{ textDecoration: "none", color: "#007bff" }}>
+                            Вход
+                        </Link>
+                        <Link
+                            to="/registration"
+                            style={{ textDecoration: "none", color: "#28a745" }}
+                        >
+                            Регистрация
+                        </Link>
                     </>
                 ) : (
                     <button
                         onClick={handleLogout}
                         style={{
-                            background: 'red',
-                            color: 'white',
-                            border: 'none',
-                            padding: '5px 10px',
-                            cursor: 'pointer',
-                            borderRadius: '4px'
+                            background: "red",
+                            color: "white",
+                            border: "none",
+                            padding: "5px 10px",
+                            cursor: "pointer",
+                            borderRadius: "4px",
                         }}
                     >
                         Выйти
@@ -85,6 +98,8 @@ const App = () => {
                 <Route path="/properties/:id" element={<PropertyDetailPage />} />
                 <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path="/registration" element={<Registration />} />
+                {/* Маршрут для бронирования недвижимости, propertyId будет автоматически подставляться */}
+                <Route path="/booking/:propertyId" element={<BookingWrapper />} />
             </Routes>
         </Router>
     );
