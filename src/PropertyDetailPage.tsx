@@ -48,22 +48,21 @@ const PropertyDetailPage: React.FC = () => {
             setBookingStatus("Выберите даты!");
             return;
         }
-
         try {
             const token = localStorage.getItem("token");
+            // Use the date strings directly without adding time
             const response = await axios.post(
                 `http://localhost:8080/booking/save`,
                 null,
                 {
                     params: {
                         propertyId: id,
-                        checkInDate,
-                        checkOutDate,
+                        checkInDate: checkInDate,
+                        checkOutDate: checkOutDate,
                     },
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
-
             setBookingStatus("Бронирование успешно!");
             console.log(response.data);
         } catch (error) {
@@ -71,6 +70,7 @@ const PropertyDetailPage: React.FC = () => {
             console.error(error);
         }
     };
+
 
     if (!property) {
         return <div>Загрузка...</div>;
