@@ -1,0 +1,59 @@
+.about-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.about-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.about-description {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.features, .how-to-use, .contact-info {
+    margin-top: 20px;
+}
+
+.features h2, .how-to-use h2, .contact-info h2 {
+    color: #007bff;
+    font-size: 1.5rem;
+}
+
+.features ul, .how-to-use ol {
+    padding-left: 20px;
+}
+
+.features li, .how-to-use li {
+    font-size: 1.1rem;
+    margin: 8px 0;
+}
+
+.contact-info p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+@media (max-width: 600px) {
+    .about-container {
+        padding: 15px;
+    }
+
+    .about-title {
+        font-size: 1.8rem;
+    }
+
+    .about-description {
+        font-size: 1rem;
+    }
+}

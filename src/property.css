@@ -1,0 +1,128 @@
+/* Общие стили */
+.container {
+    min-height: 100vh;
+    padding: 1.25rem;
+    background-color: #f3f4f6;
+}
+
+.header {
+    font-size: 1.875rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.25rem;
+}
+
+/* Стили для формы добавления */
+.form-container {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 32rem;
+}
+
+.form-input {
+    border: 2px solid black;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+/* Стили для фильтров */
+.filter-container {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+/* Сетка свойств */
+.properties-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.25rem;
+}
+
+.description {
+    width: 200px;
+}
+
+.property-card {
+    background-color: white;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 1rem;
+}
+
+.property-image {
+    /*width: 100%;*/
+    width: 200px;
+    height: 12rem;
+    object-fit: cover;
+    border-radius: 0.375rem;
+}
+
+/* Кнопки */
+.button {
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    border: none;
+}
+
+.blue-button {
+    background-color: #3b82f6;
+}
+
+.green-button {
+    background-color: #22c55e;
+}
+
+/* Медиа-запросы */
+@media (min-width: 640px) {
+    .properties-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .properties-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1280px) {
+    .properties-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.slider-container {
+    position: relative;
+}
+
+.slider-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.slider-button-left {
+    left: 0.5rem;
+}
+
+.slider-button-right {
+    right: 0.5rem;
+}
