@@ -72,9 +72,10 @@ const Profile: React.FC = () => {
     fetchBookings();
   }, [id]);
 
-  // Убираем дублирующиеся property по id
+  // Группировка бронирований, чтобы избежать дублирования объектов недвижимости
   const uniqueBookingsMap = new Map<number, Booking>();
   bookingProperties.forEach(booking => {
+    // Здесь ключом используем уникальный id объекта недвижимости
     uniqueBookingsMap.set(booking.property.id, booking);
   });
   const uniqueBookings = Array.from(uniqueBookingsMap.values());
@@ -105,17 +106,24 @@ const Profile: React.FC = () => {
 
         <h1>Забронированные объявления</h1>
         <ul className="property-list">
-          {uniqueBookings.map((booking, index) => {
+          {uniqueBookings.map(booking => {
             const property = booking.property;
+            // Используем уникальный идентификатор объекта недвижимости в качестве ключа
             return (
-                <li key={index} className="property-item">
+                <li key={property.id} className="property-item">
                   <h3>{property.title}</h3>
                   <p>{property.description}</p>
                   <p>Price per night: {property.pricePerNight}</p>
                   <p>Location: {property.location}</p>
-                  <p><strong>Бронирование:</strong> с {booking.checkInDate} по {booking.checkOutDate}</p>
-                  <p><strong>Дата брони:</strong> {new Date(booking.bookingDate).toLocaleString()}</p>
-                  <p><strong>Статус:</strong> {booking.status ?? 'Неизвестен'}</p>
+                  <p>
+                    <strong>Бронирование:</strong> с {booking.checkInDate} по {booking.checkOutDate}
+                  </p>
+                  <p>
+                    <strong>Дата брони:</strong> {new Date(booking.bookingDate).toLocaleString()}
+                  </p>
+                  <p>
+                    <strong>Статус:</strong> {booking.status ?? 'Неизвестен'}
+                  </p>
                   <div className="photo-gallery">
                     {property.photos && property.photos.map(photo => (
                         <img
