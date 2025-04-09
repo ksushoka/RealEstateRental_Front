@@ -97,8 +97,7 @@ const Profile: React.FC = () => {
       <h1>Забронированные объявления</h1>
       <ul className="property-list">
         {bookingProperties.map((booking, index) => {
-          const property = booking.property[0]; // Предположим, приходит массив из 1 элемента
-          if (!property) return null;
+          const property = booking.property;
 
           return (
               <li key={index} className="property-item">
@@ -107,7 +106,8 @@ const Profile: React.FC = () => {
                 <p>Price per night: {property.pricePerNight}</p>
                 <p>Location: {property.location}</p>
                 <p><strong>Бронирование:</strong> с {booking.checkInDate} по {booking.checkOutDate}</p>
-                <p>Статус: {booking.status}</p>
+                <p><strong>Дата брони:</strong> {new Date(booking.bookingDate).toLocaleString()}</p>
+                <p><strong>Статус:</strong> {booking.status ?? 'Неизвестен'}</p>
                 <div className="photo-gallery">
                   {property.photos && property.photos.map(photo => (
                       <img
