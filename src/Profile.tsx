@@ -7,7 +7,7 @@ interface Booking {
   checkOutDate: string,
   bookingDate: string,
   status: string,
-  property: Property[]
+  property: Property;
 
 }
 interface Photo {
@@ -49,7 +49,7 @@ const Profile: React.FC = () => {
     fetchProperties();
   }, [id]);
   // const { id } = useParams<{ id: string }>();
-  const [bookingProperties, setBookingProperties] = useState<Property[]>([]);
+  const [bookingProperties, setBookingProperties] = useState<Booking[]>([]);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -96,23 +96,31 @@ const Profile: React.FC = () => {
       </ul>
       <h1>Забронированные объявления</h1>
       <ul className="property-list">
-        {bookingProperties.map(property => (
-          <li key={property.id} className="property-item">
-            <h3>{property.title}</h3>
-            <p>{property.description}</p>
-            <p>Price per night: {property.pricePerNight}</p>
-            <p>Location: {property.location}</p>
-            <div className="photo-gallery">
-              {property.photos && property.photos.map(photo => (
-                <img
-                  key={photo.id}
-                  src = {`http://localhost:8080/properties/photos/${photo.fileName}`}
-                  alt= 'property'
-                  style={{ width: '200px', height: '120px', marginRight: '0px' }}/>
-              ))}
-            </div>
-          </li>
-        ))}
+        {bookingProperties.map((booking, index) => {
+          const property = booking.property[0]; // Предположим, приходит массив из 1 элемента
+          if (!property) return null;
+
+          return (
+              <li key={index} className="property-item">
+                <h3>{property.title}</h3>
+                <p>{property.description}</p>
+                <p>Price per night: {property.pricePerNight}</p>
+                <p>Location: {property.location}</p>
+                <p><strong>Бронирование:</strong> с {booking.checkInDate} по {booking.checkOutDate}</p>
+                <p>Статус: {booking.status}</p>
+                <div className="photo-gallery">
+                  {property.photos && property.photos.map(photo => (
+                      <img
+                          key={photo.id}
+                          src={`http://localhost:8080/properties/photos/${photo.fileName}`}
+                          alt="property"
+                          style={{ width: '200px', height: '120px', marginRight: '0px' }}
+                      />
+                  ))}
+                </div>
+              </li>
+          );
+        })}
       </ul>
     </div>
   );
