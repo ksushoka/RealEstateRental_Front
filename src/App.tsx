@@ -9,6 +9,8 @@ import UserPage from "./UserPage.tsx";
 // @ts-ignore
 import UserDetailPage from "./UserDetailPage.tsx";
 // @ts-ignore
+import Profile from './Profile.tsx';
+// @ts-ignore
 import UserListPage from "./UserListPage.tsx";
 // @ts-ignore
 import AddProperty from "./AddProperty.tsx";
@@ -49,6 +51,9 @@ const App: React.FC = () => {
                 <Link to="/" style={{ textDecoration: "none", color: "#333" }}>
                     Главная
                 </Link>
+              <Link to="/profile" style={{ textDecoration: "none", color: "#333" }}>
+                    Мой профиль
+              </Link>
                 <Link to="/about" style={{ textDecoration: "none", color: "#333" }}>
                     О недвижимости
                 </Link>
@@ -100,6 +105,7 @@ const App: React.FC = () => {
                 <Route path="/registration" element={<Registration />} />
                 {/* Маршрут для бронирования недвижимости, propertyId будет автоматически подставляться */}
                 <Route path="/booking/:propertyId" element={<BookingWrapper />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
         </Router>
     );
