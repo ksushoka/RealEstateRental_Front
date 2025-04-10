@@ -82,14 +82,14 @@ const PropertyDetailPage: React.FC = () => {
             <h1>{property.title}</h1>
             <div className="photo-gallery">
                 {property.photos && property.photos.length > 0 ? (
-                    property.photos.map((photo) => (
-                        <img
-                            key={photo.id}
-                            src={`http://localhost:8080/properties/photos/${photo.fileName}`}
-                            alt={property.title}
-                            className="property-photo"
-                        />
-                    ))
+                  property.photos.map((photo, index) => (
+                    <img
+                      key={`${photo.id}-${photo.fileName}-${index}`}
+                      src={`http://localhost:8080/properties/photos/${photo.fileName}`}
+                      alt={property.title}
+                      className="property-photo"
+                    />
+                  ))
                 ) : (
                     <div>Нет изображений</div>
                 )}
