@@ -88,8 +88,8 @@ const Profile: React.FC = () => {
               <li key={property.id} className="property-item">
                 <h3>{property.title}</h3>
                 <p>{property.description}</p>
-                <p>Price per night: {property.pricePerNight}</p>
-                <p>Location: {property.location}</p>
+                <p><b>Цена за ночь: {property.pricePerNight}</b></p>
+                <p><b>Местоположение: {property.location}</b></p>
                 <div className="photo-gallery">
                   {property.photos && property.photos.map(photo => (
                       <img
@@ -113,8 +113,8 @@ const Profile: React.FC = () => {
                 <li key={property.id} className="property-item">
                   <h3>{property.title}</h3>
                   <p>{property.description}</p>
-                  <p>Price per night: {property.pricePerNight}</p>
-                  <p>Location: {property.location}</p>
+                  <p><b>Цена за ночь: {property.pricePerNight}</b></p>
+                  <p><b>Местоположение: {property.location}</b></p>
                   <p>
                     <strong>Бронирование:</strong> с {booking.checkInDate} по {booking.checkOutDate}
                   </p>
