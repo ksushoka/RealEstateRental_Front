@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import './UserPage.css';
-
-interface Photo {
-  id: number;
-  fileName: string;
-}
 
 interface Property {
   id: number;
@@ -13,39 +9,38 @@ interface Property {
   description: string;
   pricePerNight: number;
   location: string;
-  photos: Photo[];
+  photos: string[]; // Изменено на массив строк
+  amenityTypes: string[];
 }
 
 interface Booking {
+  id: number;
   checkInDate: string;
   checkOutDate: string;
   bookingDate: string;
-  status: string | null;
-  property: Property;
+  status: string;
+  propertyId: number; // Изменено с property на propertyId
 }
 
 const Profile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-
   const [properties, setProperties] = useState<Property[]>([]);
   const [bookingProperties, setBookingProperties] = useState<Booking[]>([]);
+  const [bookedProperties, setBookedProperties] = useState<Map<number, Property>>(new Map());
 
   // Загрузка объявлений пользователя
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8080/users/properties`, {
+        const response = await axios.get<Property[]>(`http://localhost:8080/users/properties`, {
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
         });
-        if (!response.ok) throw new Error('Failed to fetch properties');
-        const data = await response.json();
-        setProperties(Array.isArray(data) ? data : []);
+        setProperties(response.data);
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching properties:', error);
       }
     };
     fetchProperties();
@@ -56,29 +51,45 @@ const Profile: React.FC = () => {
     const fetchBookings = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8080/booking/all`, {
+        const response = await axios.get<Booking[]>(`http://localhost:8080/booking/all`, {
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
         });
-        if (!response.ok) throw new Error('Failed to fetch bookings');
-        const data = await response.json();
-        setBookingProperties(Array.isArray(data) ? data : []);
+        setBookingProperties(response.data);
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching bookings:', error);
       }
     };
     fetchBookings();
   }, [id]);
 
-  // Группировка бронирований, чтобы избежать дублирования объектов недвижимости
-  const uniqueBookingsMap = new Map<number, Booking>();
-  bookingProperties.forEach(booking => {
-    // Здесь ключом используем уникальный id объекта недвижимости
-    uniqueBookingsMap.set(booking.property.id, booking);
-  });
-  const uniqueBookings = Array.from(uniqueBookingsMap.values());
+  // Загрузка данных по забронированным свойствам
+  useEffect(() => {
+    const fetchBookedProperties = async () => {
+      const propertyIds = Array.from(new Set(bookingProperties.map(b => b.propertyId)));
+      try {
+        const properties = await Promise.all(
+            propertyIds.map(id =>
+                axios.get<Property>(`http://localhost:8080/properties/${id}`)
+                    .then(res => res.data)
+                    .catch(() => null)
+            )
+        );
+
+        const validProperties = properties.filter(p => p !== null) as Property[];
+        const newMap = new Map<number, Property>();
+        validProperties.forEach(p => newMap.set(p.id, p));
+        setBookedProperties(newMap);
+      } catch (error) {
+        console.error('Error fetching booked properties:', error);
+      }
+    };
+
+    if (bookingProperties.length > 0) {
+      fetchBookedProperties();
+    }
+  }, [bookingProperties]);
 
   return (
       <div className="container">
@@ -88,13 +99,13 @@ const Profile: React.FC = () => {
               <li key={property.id} className="property-item">
                 <h3>{property.title}</h3>
                 <p>{property.description}</p>
-                <p><b>Цена за ночь: {property.pricePerNight}</b></p>
+                <p><b>Цена за ночь: {property.pricePerNight} ₽</b></p>
                 <p><b>Местоположение: {property.location}</b></p>
                 <div className="photo-gallery">
-                  {property.photos && property.photos.map(photo => (
+                  {property.photos.map((fileName, index) => (
                       <img
-                          key={photo.id}
-                          src={`http://localhost:8080/properties/photos/${photo.fileName}`}
+                          key={`${property.id}-${fileName}-${index}`}
+                          src={`http://localhost:8080/properties/photos/${fileName}`}
                           alt="property"
                           style={{ width: '200px', height: '120px', marginRight: '0px' }}
                       />
@@ -106,14 +117,15 @@ const Profile: React.FC = () => {
 
         <h1>Забронированные объявления</h1>
         <ul className="property-list">
-          {uniqueBookings.map(booking => {
-            const property = booking.property;
-            // Используем уникальный идентификатор объекта недвижимости в качестве ключа
+          {bookingProperties.map(booking => {
+            const property = bookedProperties.get(booking.propertyId);
+            if (!property) return null;
+
             return (
-                <li key={property.id} className="property-item">
+                <li key={booking.id} className="property-item">
                   <h3>{property.title}</h3>
                   <p>{property.description}</p>
-                  <p><b>Цена за ночь: {property.pricePerNight}</b></p>
+                  <p><b>Цена за ночь: {property.pricePerNight} ₽</b></p>
                   <p><b>Местоположение: {property.location}</b></p>
                   <p>
                     <strong>Бронирование:</strong> с {booking.checkInDate} по {booking.checkOutDate}
@@ -122,13 +134,13 @@ const Profile: React.FC = () => {
                     <strong>Дата брони:</strong> {new Date(booking.bookingDate).toLocaleString()}
                   </p>
                   <p>
-                    <strong>Статус:</strong> {booking.status ?? 'Неизвестен'}
+                    <strong>Статус:</strong> {booking.status}
                   </p>
                   <div className="photo-gallery">
-                    {property.photos && property.photos.map(photo => (
+                    {property.photos.map((fileName, index) => (
                         <img
-                            key={photo.id}
-                            src={`http://localhost:8080/properties/photos/${photo.fileName}`}
+                            key={`${property.id}-${fileName}-${index}`}
+                            src={`http://localhost:8080/properties/photos/${fileName}`}
                             alt="property"
                             style={{ width: '200px', height: '120px', marginRight: '0px' }}
                         />
