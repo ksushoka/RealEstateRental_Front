@@ -9,13 +9,22 @@ interface Property {
     description: string;
     pricePerNight: number;
     location: string;
-    photos: string[]; // Изменено на массив строк
+    photos: string[];
     amenityTypes: string[];
+    hostId: number;
+}
+
+interface User {
+    id: number;
+    username: string;
+    photoPath: string;
+    email: string;
 }
 
 const PropertyDetailPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [property, setProperty] = useState<Property | null>(null);
+    const [owner, setOwner] = useState<User | null>(null);
     const [checkInDate, setCheckInDate] = useState<string>("");
     const [checkOutDate, setCheckOutDate] = useState<string>("");
     const [bookingStatus, setBookingStatus] = useState<string | null>(null);
@@ -26,9 +35,7 @@ const PropertyDetailPage: React.FC = () => {
                 const token = localStorage.getItem("token");
                 const response = await axios.get<Property>(
                     `http://localhost:8080/properties/${id}`,
-                    {
-                        headers: { Authorization: `Bearer ${token}` },
-                    }
+                    { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setProperty(response.data);
             } catch (error) {
@@ -37,6 +44,24 @@ const PropertyDetailPage: React.FC = () => {
         };
         fetchProperty();
     }, [id]);
+
+    useEffect(() => {
+        const fetchOwner = async () => {
+            if (property?.hostId) {
+                try {
+                    const token = localStorage.getItem("token");
+                    const response = await axios.get<User>(
+                        `http://localhost:8080/users/${property.hostId}`,
+                        { headers: { Authorization: `Bearer ${token}` } }
+                    );
+                    setOwner(response.data);
+                } catch (error) {
+                    console.error("Ошибка при загрузке владельца:", error);
+                }
+            }
+        };
+        fetchOwner();
+    }, [property?.hostId]);
 
     const handleBooking = async () => {
         if (!checkInDate || !checkOutDate) {
@@ -73,6 +98,7 @@ const PropertyDetailPage: React.FC = () => {
         <div className="property-detail-container">
             <Link to="/" className="back-link">← Назад к списку</Link>
             <h1>{property.title}</h1>
+
             <div className="photo-gallery">
                 {property.photos && property.photos.length > 0 ? (
                     property.photos.map((fileName, index) => (
@@ -87,9 +113,36 @@ const PropertyDetailPage: React.FC = () => {
                     <div>Нет изображений</div>
                 )}
             </div>
+
             <p>{property.description}</p>
             <p><strong>Цена за ночь:</strong> {property.pricePerNight} ₽</p>
             <p><strong>Локация:</strong> {property.location}</p>
+
+            <div className="owner-section">
+                <h2>Владелец жилья</h2>
+                {owner ? (
+                    <div className="owner-profile">
+                        <div className="owner-photo-container">
+                            <img
+                                src={owner.photoPath
+                                    ? `http://localhost:8080/users/photos/${owner.photoPath}`
+                                    : '/default-avatar.png'}
+                                alt={owner.username}
+                                className="owner-photo"
+                            />
+                        </div>
+                        <div className="owner-info">
+                            <h3>{owner.username}</h3>
+                            <p>Контакты: {owner.email}</p>
+                            <Link to={`/user/${owner.id}`} className="profile-link">
+                                Посмотреть профиль
+                            </Link>
+                        </div>
+                    </div>
+                ) : (
+                    <div>Загрузка информации о владельце...</div>
+                )}
+            </div>
 
             <div className="booking-form">
                 <h3>Забронировать</h3>
@@ -102,7 +155,7 @@ const PropertyDetailPage: React.FC = () => {
                 <label>Дата выезда:</label>
                 <input
                     type="date"
-                    value={checkOutDate} // Исправлено: было "va lue"
+                    value={checkOutDate}
                     onChange={(e) => setCheckOutDate(e.target.value)}
                 />
                 <button onClick={handleBooking} className="book-button">
