@@ -186,7 +186,7 @@ const PropertyDetailPage: React.FC = () => {
         <div className="property-detail-container">
             <Link to="/" className="back-link">← Назад к списку</Link>
             <h1>{property.title}</h1>
-
+            {renderStars(property.averageRating)}
             <div className="photo-gallery">
                 {property.photos && property.photos.length > 0 ? (
                     property.photos.map((fileName, index) => (
