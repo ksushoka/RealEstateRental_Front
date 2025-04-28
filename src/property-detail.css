@@ -273,3 +273,207 @@ body {
     background: #218838;
 }
 
+.reviews-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.reviews-section h3,
+.reviews-section h4 {
+    margin-bottom: 1rem;
+    color: #222;
+    font-weight: 600;
+}
+
+.review-item {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 1rem;
+    transition: background 0.3s;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.review-item:hover {
+    background: #f9f9f9;
+}
+
+.review-item p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555;
+}
+
+.review-item strong {
+    color: #333;
+    font-size: 1.05rem;
+}
+
+/* Форма добавления отзыва */
+.reviews-section label {
+    display: block;
+    margin: 0.75rem 0 0.25rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.reviews-section select,
+.reviews-section textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+.review-submit-button {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: #28a745;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.review-submit-button:hover {
+    background: #218838;
+}
+
+/* Статусное сообщение */
+.reviews-section .status-message {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+/* === Стили для страницы недвижимости === */
+/* …ваши предыдущие правила… */
+
+/* === Стили для раздела отзывов === */
+.reviews-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.reviews-section h3,
+.reviews-section h4 {
+    margin-bottom: 1rem;
+    color: #222;
+    font-weight: 600;
+}
+
+.review-item {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 1rem;
+    transition: background 0.3s;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.review-item:hover {
+    background: #f9f9f9;
+}
+
+.review-item p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555;
+}
+
+.review-item strong {
+    color: #333;
+    font-size: 1.05rem;
+}
+
+/* === Стили для звёздочек === */
+.star {
+    font-size: 1.5rem;
+    color: #ccc;            /* не заполненная звезда */
+    cursor: pointer;
+    transition: color 0.2s;
+    display: inline-block;
+    margin-right: 0.2rem;
+}
+
+.star.filled {
+    color: #f5a623;         /* заполненная звезда */
+}
+
+/* обёртка для вывода существующего рейтинга */
+.star-display {
+    margin-bottom: 0.5rem;
+}
+
+/* обёртка для выбора рейтинга */
+.star-input {
+    margin: 0.5rem 0 1rem;
+}
+
+/* стили формы отзыва */
+.reviews-section label {
+    display: block;
+    margin: 0.75rem 0 0.25rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.reviews-section select,
+.reviews-section textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+.review-submit-button {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: #28a745;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.review-submit-button:hover {
+    background: #218838;
+}
+
+/* сообщение о статусе */
+.reviews-section .status-message {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    background: #d1ecf1;
+    color: #0c5460;
+}
+

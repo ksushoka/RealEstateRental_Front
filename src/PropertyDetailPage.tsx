@@ -21,14 +21,47 @@ interface User {
     email: string;
 }
 
+interface ReviewDTO {
+    username: string;
+    rating: number;
+    comment: string;
+}
+
+const MAX_STARS = 5;
+
+const Star: React.FC<{
+    filled: boolean;
+    onClick?: () => void;
+    onMouseEnter?: () => void;
+    onMouseLeave?: () => void;
+}> = ({ filled, onClick, onMouseEnter, onMouseLeave }) => (
+    <span
+        className={`star ${filled ? 'filled' : ''}`}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+    >
+        ★
+    </span>
+);
+
 const PropertyDetailPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [property, setProperty] = useState<Property | null>(null);
     const [owner, setOwner] = useState<User | null>(null);
-    const [checkInDate, setCheckInDate] = useState<string>("");
-    const [checkOutDate, setCheckOutDate] = useState<string>("");
+    const [reviews, setReviews] = useState<ReviewDTO[]>([]);
+    const [newRating, setNewRating] = useState<number>(MAX_STARS);
+    const [hoverRating, setHoverRating] = useState<number>(0);
+    const [newComment, setNewComment] = useState<string>(""
+    );
+    const [checkInDate, setCheckInDate] = useState<string>(""
+    );
+    const [checkOutDate, setCheckOutDate] = useState<string>(""
+    );
     const [bookingStatus, setBookingStatus] = useState<string | null>(null);
+    const [reviewStatus, setReviewStatus] = useState<string | null>(null);
 
+    // Загрузка данных о недвижимости
     useEffect(() => {
         const fetchProperty = async () => {
             try {
@@ -45,6 +78,7 @@ const PropertyDetailPage: React.FC = () => {
         fetchProperty();
     }, [id]);
 
+    // Загрузка данных о владельце
     useEffect(() => {
         const fetchOwner = async () => {
             if (property?.hostId) {
@@ -63,6 +97,24 @@ const PropertyDetailPage: React.FC = () => {
         fetchOwner();
     }, [property?.hostId]);
 
+    // Загрузка отзывов
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await axios.get<ReviewDTO[]>(
+                    `http://localhost:8080/review/property/${id}`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                setReviews(response.data);
+            } catch (error) {
+                console.error("Ошибка при загрузке отзывов:", error);
+            }
+        };
+        fetchReviews();
+    }, [id]);
+
+    // Бронирование
     const handleBooking = async () => {
         if (!checkInDate || !checkOutDate) {
             setBookingStatus("Выберите даты!");
@@ -70,22 +122,48 @@ const PropertyDetailPage: React.FC = () => {
         }
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post(
+            await axios.post(
                 `http://localhost:8080/booking/save`,
                 null,
                 {
                     params: {
                         propertyId: id,
-                        checkInDate: checkInDate,
-                        checkOutDate: checkOutDate,
+                        checkInDate,
+                        checkOutDate,
                     },
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
             setBookingStatus("Бронирование успешно!");
-            console.log(response.data);
         } catch (error) {
             setBookingStatus("Ошибка при бронировании.");
+            console.error(error);
+        }
+    };
+
+    // Отправка отзыва
+    const handleReviewSubmit = async () => {
+        if (!newComment) {
+            setReviewStatus("Введите текст отзыва!");
+            return;
+        }
+        try {
+            const token = localStorage.getItem("token");
+            await axios.post(
+                `http://localhost:8080/review/save/${id}`,
+                { rating: newRating, comment: newComment },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setReviewStatus("Отзыв добавлен!");
+            const response = await axios.get<ReviewDTO[]>(
+                `http://localhost:8080/review/property/${id}`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setReviews(response.data);
+            setNewComment("");
+            setNewRating(MAX_STARS);
+        } catch (error) {
+            setReviewStatus("Ошибка при отправке отзыва.");
             console.error(error);
         }
     };
@@ -162,6 +240,54 @@ const PropertyDetailPage: React.FC = () => {
                     Забронировать
                 </button>
                 {bookingStatus && <p className="status-message">{bookingStatus}</p>}
+            </div>
+
+            <div className="reviews-section">
+                <h3>Отзывы</h3>
+                {reviews.length > 0 ? (
+                    reviews.map((rev, idx) => (
+                        <div key={idx} className="review-item">
+                            <div className="star-display">
+                                {Array.from({ length: MAX_STARS }, (_, i) => (
+                                    <Star key={i} filled={i < rev.rating} />
+                                ))}
+                            </div>
+                            <p><strong>{rev.username}</strong></p>
+                            <p>{rev.comment}</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>Пока нет отзывов.</p>
+                )}
+
+                <h4>Оставить отзыв</h4>
+                <label>Рейтинг:</label>
+                <div className="star-input">
+                    {Array.from({ length: MAX_STARS }, (_, i) => {
+                        const starValue = i + 1;
+                        return (
+                            <Star
+                                key={i}
+                                filled={hoverRating
+                                    ? i < hoverRating
+                                    : i < newRating}
+                                onClick={() => setNewRating(starValue)}
+                                onMouseEnter={() => setHoverRating(starValue)}
+                                onMouseLeave={() => setHoverRating(0)}
+                            />
+                        );
+                    })}
+                </div>
+                <label>Комментарий:</label>
+                <textarea
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    rows={4}
+                />
+                <button onClick={handleReviewSubmit} className="review-submit-button">
+                    Отправить отзыв
+                </button>
+                {reviewStatus && <p className="status-message">{reviewStatus}</p>}
             </div>
         </div>
     );
