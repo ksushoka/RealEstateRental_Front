@@ -57,9 +57,9 @@ const App: React.FC = () => {
                 <Link to="/about" style={{ textDecoration: "none", color: "#333" }}>
                     О недвижимости
                 </Link>
-                <Link to="/users" style={{ textDecoration: "none", color: "#333" }}>
-                    Список владельцев
-                </Link>
+                {/*<Link to="/users" style={{ textDecoration: "none", color: "#333" }}>*/}
+                {/*    Список владельцев*/}
+                {/*</Link>*/}
                 <Link to="/addProperty" style={{ textDecoration: "none", color: "#333" }}>
                     Создать объявление
                 </Link>
@@ -97,7 +97,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/user" element={<UserPage />} />
-                <Route path="/users" element={<UserListPage />} />
+                {/*<Route path="/users" element={<UserListPage />} />*/}
                 <Route path="/users/:id" element={<UserDetailPage />} />
                 <Route path="/addProperty" element={<AddProperty />} />
                 <Route path="/properties/:id" element={<PropertyDetailPage />} />
