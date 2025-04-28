@@ -10,6 +10,7 @@ interface Property {
     pricePerNight: number;
     location: string;
     photos: string[];
+    averageRating: number;
 }
 
 const Home = () => {
