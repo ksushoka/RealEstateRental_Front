@@ -12,6 +12,7 @@ interface Property {
     photos: string[];
     amenityTypes: string[];
     hostId: number;
+    averageRating: number;
 }
 
 interface User {
@@ -45,6 +46,14 @@ const Star: React.FC<{
     </span>
 );
 
+const renderStars = (rating: number) => (
+    <div className="star-display">
+        {Array.from({ length: MAX_STARS }, (_, i) => (
+            <Star key={i} filled={i < Math.round(rating)} />
+        ))}
+    </div>
+);
+
 const PropertyDetailPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [property, setProperty] = useState<Property | null>(null);
@@ -60,6 +69,7 @@ const PropertyDetailPage: React.FC = () => {
     );
     const [bookingStatus, setBookingStatus] = useState<string | null>(null);
     const [reviewStatus, setReviewStatus] = useState<string | null>(null);
+
 
     // Загрузка данных о недвижимости
     useEffect(() => {

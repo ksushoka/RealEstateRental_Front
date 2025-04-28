@@ -1,3 +1,4 @@
+// Home.tsx
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./property.css";
@@ -12,6 +13,23 @@ interface Property {
     photos: string[];
     averageRating: number;
 }
+
+const MAX_STARS = 5;
+
+// @ts-ignore
+const Star: React.FC<{ filled: boolean }> = ({ filled }) => (
+    <span className={`star ${filled ? 'filled' : ''}`}>★</span>
+);
+
+const renderStars = (rating: number) => {
+    return (
+        <div className="star-display">
+            {Array.from({ length: MAX_STARS }, (_, i) => (
+                <Star key={i} filled={i < Math.round(rating)} />
+            ))}
+        </div>
+    );
+};
 
 const Home = () => {
     const [properties, setProperties] = useState<Property[]>([]);
@@ -122,6 +140,7 @@ const PropertyCard: React.FC<{ property: Property }> = ({ property }) => {
                 <h2 style={{ fontSize: "1.25rem", fontWeight: "600", marginTop: "0.5rem" }}>
                     {property.title}
                 </h2>
+                {renderStars(property.averageRating)}
                 <p className="description" style={{
                     color: "#4b5563",
                     margin: "0.5rem 0",
