@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import "./property-detail.css";
+import "./property.css";
 
 interface Property {
     id: number;
