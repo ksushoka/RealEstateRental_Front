@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './auth.css';
 import { useNavigate } from 'react-router-dom';
 
 const Registration: React.FC = () => {
