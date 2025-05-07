@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./app.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 // @ts-ignore
 import Home from "./Home.tsx";

@@ -1,0 +1,68 @@
+/* app.css */
+
+/* Сброс отступов и базовые стили для всего приложения */
+body, html, #root {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f7fa;
+}
+
+/* Хедер */
+.app-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 0.75rem 0;
+    background-color: #f0f0f0;
+    flex-wrap: wrap;
+}
+
+/* Ссылки в хедере */
+.app-header a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.app-header a:hover {
+    color: #007bff;
+}
+
+/* Кнопка выхода */
+.logout-button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.logout-button:hover {
+    opacity: 0.9;
+}
+
+/* Стили для ссылок Вход и Регистрация */
+.login-link {
+    color: #007bff;
+}
+
+.register-link {
+    color: #28a745;
+}
+
+/* Адаптив */
+@media (max-width: 600px) {
+    .app-header {
+        gap: 1rem;
+        padding: 0.5rem 0;
+    }
+    .app-header a, .logout-button {
+        font-size: 0.9rem;
+    }
+}
