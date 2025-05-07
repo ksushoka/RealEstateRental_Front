@@ -69,9 +69,13 @@ const Profile: React.FC = () => {
     const fetchBookedProperties = async () => {
       const propertyIds = Array.from(new Set(bookingProperties.map(b => b.propertyId)));
       try {
+        const token = localStorage.getItem('token');
         const properties = await Promise.all(
             propertyIds.map(id =>
-                axios.get<Property>(`http://localhost:8080/properties/${id}`)
+                axios.get<Property>(`http://localhost:8080/properties/${id}`,
+                  {headers:{
+                    Authorization:`Bearer ${token}`
+                    }})
                     .then(res => res.data)
                     .catch(() => null)
             )
