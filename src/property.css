@@ -12,14 +12,16 @@
     margin-bottom: 1.25rem;
 }
 
-/* Стили для формы добавления */
-.form-container {
+/* Форма фильтров */
+.filter-container {
     background-color: white;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 32rem;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
 }
 
 .form-input {
@@ -27,44 +29,40 @@
     padding: 0.5rem;
     border-radius: 0.375rem;
     width: 100%;
-    margin-bottom: 1rem;
+    max-width: 200px;
 }
 
-/* Стили для фильтров */
-.filter-container {
-    background-color: white;
-    padding: 1rem;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
-}
-
-/* Сетка свойств */
+/* Сетка карточек */
 .properties-grid {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 1fr;
     gap: 1.25rem;
 }
 
-.description {
-    width: 200px;
-}
-
+/* Карточка объекта */
 .property-card {
     background-color: white;
     border-radius: 0.375rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .property-image {
-    /*width: 100%;*/
-    width: 200px;
-    height: 12rem;
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    aspect-ratio: 4/3;
     object-fit: cover;
     border-radius: 0.375rem;
+}
+
+.description {
+    color: #4b5563;
+    margin: 0.5rem 0;
+    width: 100%;
 }
 
 /* Кнопки */
@@ -84,27 +82,11 @@
     background-color: #22c55e;
 }
 
-/* Медиа-запросы */
-@media (min-width: 640px) {
-    .properties-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 1024px) {
-    .properties-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (min-width: 1280px) {
-    .properties-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
+/* Слайдер */
 .slider-container {
     position: relative;
+    width: 100%;
+    max-width: 300px;
 }
 
 .slider-button {
@@ -127,23 +109,58 @@
     right: 0.5rem;
 }
 
-/* === Базовые стили для звёздочек === */
+/* Звездочки */
 .star {
-    font-size: 1.25rem;       /* размер звезды */
-    color: #ccc;              /* серый цвет — «пустая» звезда */
-    pointer-events: none;     /* на статических звёздах отключаем клики */
+    font-size: 1.25rem;
+    color: #ccc;
+    pointer-events: none;
     margin-right: 0.1rem;
 }
 
-/* «Заполненные» звёзды */
 .star.filled {
-    color: #f5a623;           /* золотой цвет */
+    color: #f5a623;
 }
 
-/* Контейнер, в котором рисуем усреднённый рейтинг */
 .star-display {
     display: inline-block;
     margin: 0.25rem 0;
 }
 
-/* Убедитесь, что CSS-файл подключён в обоих компонентах: */
+/* === Адаптивные точки === */
+@media (min-width: 640px) {
+    .properties-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .form-input {
+        max-width: none;
+        flex: 1;
+    }
+}
+
+@media (min-width: 1024px) {
+    .properties-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1280px) {
+    .properties-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Для очень узких экранов */
+@media (max-width: 480px) {
+    .header {
+        font-size: 1.5rem;
+    }
+    .filter-container {
+        flex-direction: column;
+    }
+    .form-input {
+        max-width: 100%;
+    }
+    .button {
+        width: 100%;
+    }
+}

@@ -28,6 +28,7 @@
 .features h2, .how-to-use h2, .contact-info h2 {
     color: #007bff;
     font-size: 1.5rem;
+    margin-bottom: 10px;
 }
 
 .features ul, .how-to-use ol {
@@ -37,6 +38,7 @@
 .features li, .how-to-use li {
     font-size: 1.1rem;
     margin: 8px 0;
+    line-height: 1.5;
 }
 
 .contact-info p {
@@ -44,16 +46,40 @@
     margin: 5px 0;
 }
 
-@media (max-width: 600px) {
+/* Адаптивность */
+@media (max-width: 768px) {
     .about-container {
+        margin: 20px 10px;
         padding: 15px;
     }
 
     .about-title {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
 
     .about-description {
         font-size: 1rem;
+    }
+
+    .features h2, .how-to-use h2, .contact-info h2 {
+        font-size: 1.3rem;
+    }
+
+    .features li, .how-to-use li, .contact-info p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-title {
+        font-size: 1.4rem;
+    }
+
+    .about-description {
+        font-size: 0.95rem;
+    }
+
+    .features li, .how-to-use li, .contact-info p {
+        font-size: 0.95rem;
     }
 }
